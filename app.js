@@ -6,7 +6,6 @@ const app = express();
 let port = 3000;
 
 app.get('/', (req, res) => {
-
     res.header("Access-Control-Allow-Origin", "*")
     const { type, press_id, article_id } = req.query;
 
@@ -24,7 +23,7 @@ app.get('/', (req, res) => {
         }
 
         res.send(sendResult);
-    
+        return;
     }
 
     getWarn(press_id, article_id)
