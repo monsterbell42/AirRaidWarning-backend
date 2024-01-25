@@ -16,6 +16,17 @@ app.get('/', (req, res) => {
         message: 'default'
     }
 
+    if (isNaN(press_id) || isNaN(article_id)) {
+        let sendResult = {
+            status: 'error',
+            isRaid: false,
+            message: 'Invalid input format: not a numeric value'
+        }
+
+        res.send(sendResult);
+    
+    }
+
     getWarn(press_id, article_id)
         .then((raidResult) => {
             if (raidResult.length === 0) {
