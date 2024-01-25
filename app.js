@@ -1,28 +1,58 @@
 import express from 'express';
-import {conn as db} from './db/maria.js';
+import { getWarn } from './db/function.js';
+import { communityInfo } from './community-info.js';
 
 const app = express();
 let port = 3000;
 
 app.get('/', (req, res) => {
-    res.header("Access-Control-Allow-Origin", "*")
 
-    const {url} = req.query;
-    
-    let fakeRaidWarn = {
-        isRaid: true,
-        selector: '#cbox_module',
-        originName: '공격 원점',
-        originUrl: 'https://www.naver.com' //공습경보 원점
+    res.header("Access-Control-Allow-Origin", "*")
+    const { type, press_id, article_id } = req.query;
+
+    let sendResult = {
+        status: 'error',
+        isRaid: false,
+        message: 'default'
     }
 
-    res.send(fakeRaidWarn);
+    getWarn(press_id, article_id)
+        .then((raidResult) => {
+            if (raidResult.length === 0) {
+                sendResult = {
+                    status: 'success',
+                    isRaid: false
+                }
+                return;
+            }
+
+            let raidResultFinal = []
+            for (let i of raidResult) {
+                const communityResult = communityInfo[i.community_id];
+                raidResultFinal.push({
+                    community_name : communityResult.name, 
+                    community_url : communityResult.getUrl(i.document_id)
+                })
+            }
+
+            sendResult = {
+                status: 'success',
+                isRaid: true,
+                result : raidResultFinal
+            }
+        })
+        .catch((err) => {
+            sendResult = {
+                status: 'error',
+                isRaid: false,
+                message: 'db error'
+            }
+        })
+        .finally(() => {
+            res.send(sendResult);
+        })
+
 });
-
-//maria db
-db.connect();
-
-
 
 const server = app.listen(port, () => {
     console.log(`server on ${port}`);

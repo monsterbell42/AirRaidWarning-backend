@@ -3,12 +3,13 @@ import dotenv from "dotenv";
 
 dotenv.config({ path: "./.env" });
 
-const conn = mysql.createConnection({
+const pool = mysql.createPool({
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    database:'air_rand'
+    database: process.env.DB_NAME,
+    connectionLimit:10
 });
 
-export {conn};
+export { pool };
