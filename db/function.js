@@ -28,4 +28,5 @@ function getWarn(press_id, article_id) {
     });
 }
 
+
 export { getWarn };

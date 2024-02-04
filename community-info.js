@@ -1,25 +1,25 @@
 const communityInfo = {
-    test: {
+    dc_test: {
         name: '테스트 갤러리',
         getUrl: (document_id) => `https://gall.dcinside.com/mini/board/view/?id=test&no=${document_id}`
     },
-    jamgall: {
+    dc_leejaemyung: {
         name: '이재명 갤러리',
         getUrl: (document_id) => `https://gall.dcinside.com/mgallery/board/view/?id=leejaemyung&no=${document_id}`
     },
-    jammangall: {
+    dc_ljm: {
         name: '인간 이재명 갤러리',
         getUrl: (document_id) => `https://gall.dcinside.com/mgallery/board/view/?id=ljm&no=${document_id}`
     },
-    jamdogall: {
+    dc_leejaemyungdo: {
         name: '이재명은 합니다 갤러리',
         getUrl: (document_id) => `https://gall.dcinside.com/mgallery/board/view/?id=leejaemyungdo&no=${document_id}`
     },
-    jamdogall: {
+    dc_zamminjoo: {
         name: '이재명의 민주당 갤러리',
         getUrl: (document_id) => `https://gall.dcinside.com/mgallery/board/view/?id=zamminjoo&no=${document_id}`
     },
-    pppgall: {
+    dc_alliescon: {
         name: '국민의힘 갤러리',
         getUrl: (document_id) => `https://gall.dcinside.com/mgallery/board/view/?id=alliescon&no=${document_id}`
     },
