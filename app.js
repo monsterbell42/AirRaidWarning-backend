@@ -1,5 +1,5 @@
 import express from 'express';
-import { getWarn } from './db/function.js';
+import { getWarnByArticle } from './db/function.js';
 import { communityInfo } from './community-info.js';
 
 const app = express();
@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
         return;
     }
 
-    getWarn(press_id, article_id)
+    getWarnByArticle(press_id, article_id)
         .then((raidResult) => {
             if (raidResult.length === 0) {
                 sendResult = {
@@ -40,15 +40,15 @@ app.get('/', (req, res) => {
             for (let i of raidResult) {
                 const communityResult = communityInfo[i.community_id];
                 raidResultFinal.push({
-                    community_name : communityResult.name, 
-                    community_url : communityResult.getUrl(i.document_id)
+                    community_name: communityResult.name,
+                    community_url: communityResult.getUrl(i.document_id)
                 })
             }
 
             sendResult = {
                 status: 'success',
                 isRaid: true,
-                result : raidResultFinal
+                result: raidResultFinal
             }
         })
         .catch((err) => {
@@ -64,6 +64,27 @@ app.get('/', (req, res) => {
 
 });
 
+// app.get('/b', (req, res) => {
+//     res.header("Access-Control-Allow-Origin", "*")
+//     getWarnByArticle(57, 1794654)
+//         .then(raidResult => {
+//             console.log(raidResult)
+//             res.send(raidResult);
+
+//         })
+// })
+
 const server = app.listen(port, () => {
     console.log(`server on ${port}`);
 });
+
+// function myFunction() {
+//     getWarnByArticle(57, 1794654)
+//         .then(raidResult => {
+//             console.log(raidResult)
+//             return;
+//         })
+// }
+
+// const intervalInMilliseconds = 5000;
+// setInterval(myFunction, intervalInMilliseconds);

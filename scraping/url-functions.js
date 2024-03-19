@@ -35,7 +35,7 @@ function getUrlInfo(url) {
         case 'www.ddanzi.com':
             return getDdanziInfo(url);
         case 'naver.me':
-            return { type: 'shortUrl' , documentId : url.pathname.slice(1)};
+            return { type: 'shortUrl', documentId: url.pathname.slice(1) };
         default:
             return { type: 'unknown' };
     }
@@ -119,7 +119,16 @@ function getDdanziInfo(url) {
     }
 }
 
-export { UrlInfo, getUrlInfo }
+function getNaverArticleUrl(pressId, articleId) {
+    function zeroPad(num, len) {
+        return num.toString().padStart(len, '0');
+    }
+
+    return `https://n.news.naver.com/article/${zeroPad(pressId, 3)}/${zeroPad(articleId, 10)}`
+
+}
+
+export { UrlInfo, getUrlInfo, getNaverArticleUrl }
 
 // console.log(getUrlInfo('https://gall.dcinside.com/board/view/?id=cartoon&no=683359&page=1'))
 

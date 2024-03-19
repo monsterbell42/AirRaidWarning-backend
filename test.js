@@ -1,4 +1,4 @@
-import {getWarn} from './db/function.js';
+const help = [1,2,3]
 
-console.log('help')
-getWarn(1,2)
+console.log(new Set(...help
+.map(i=>i+3)))
