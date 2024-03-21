@@ -79,9 +79,9 @@ const server = app.listen(port, () => {
     console.log(`server on ${port}`);
 });
 
-(async () => {
-    await scrapStart().catch(err => console.log(err))
-})()
+// (async () => {
+//     await scrapStart().catch(err => console.log(err))
+// })()
 
 // function myFunction() {
 //     getWarnByArticle(57, 1794654)
