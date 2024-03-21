@@ -108,7 +108,11 @@ function getDdanziInfo(url) {
     if (url.pathname === '/index.php') {
         documentId = url.searchParams.get('document_srl')
     } else {
-        documentId = url.pathname.split('/')[2]
+        const pathList = url.pathname.split('/')
+        
+        if (!isNaN(pathList[2])) documentId = pathList[2]
+        else if (!isNaN(pathList[1])) documentId = pathList[1]
+        else documentId = 0
     }
 
     return {

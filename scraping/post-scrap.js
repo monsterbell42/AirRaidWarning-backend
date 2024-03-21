@@ -4,7 +4,7 @@ import { communityInfo } from '../community-info.js';
 import { getWarnByCommunity, insertWarnBulk } from '../db/function.js'
 import { wait } from '../useful-functions.js'
 
-async function scrapArticleLinks(urlInfo) {
+async function scrapArticleLinks(urlInfo, stack = []) {
     if (!(urlInfo instanceof UrlInfo)) {
         urlInfo = new UrlInfo(urlInfo)
     }
@@ -12,9 +12,20 @@ async function scrapArticleLinks(urlInfo) {
     const resultList = await getWarnByCommunity(urlInfo.communityId, urlInfo.documentId)
 
     if (resultList.length == 0) {
-        return await getArticleLinksByUrl(urlInfo)
+        console.log('링크 스크랩 전 : 1.3초 대기')
+        await wait(1.3).then(() => console.log('링크 스크랩 전 대기 완'))
+
+        console.log(`${urlInfo.url} 링크 스크랩 시작`)
+        const scrapResult = await getArticleLinksByUrl(urlInfo, stack)
+
+        console.log('링크 스크랩 후 : 1.7초 대기')
+        await wait(1.7).then(() => console.log('링크 스크랩 후 대기 완'))
+
+        return scrapResult
     }
+
     console.log(`db에서 불러옴 ${resultList.length}개`)
+    await wait(0.1)
 
     return resultList.map(item => {
         const articleUrl = getNaverArticleUrl(item.press_id, item.article_id)
@@ -23,10 +34,9 @@ async function scrapArticleLinks(urlInfo) {
 }
 
 
-async function getArticleLinksByUrl(urlInfo) {
+async function getArticleLinksByUrl(urlInfo, stack = []) {
     const html = await fetch(urlInfo.url).then(res => res.text())
     const $ = cheerio.load(html);
-
     const raidTime = getRaidDate($, urlInfo.url)
 
     let linkListRaw = getRawLinkList($, urlInfo.url)
@@ -47,7 +57,7 @@ async function getArticleLinksByUrl(urlInfo) {
         // scrapedLinks = await Promise.all(communityList.map(i => scrapArticleLinks(i.url)))
         //     .then(value => [].concat(...value))
         //디시에서 밴 먹지 않도록 수정할 것
-        scrapedLinks = await combineCommunityListScrap(communityList)
+        scrapedLinks = await combineCommunityListScrap(communityList, [...stack, urlInfo])
     }
 
     let finalArticleList = beUniqueUrlList(articleList.concat(scrapedLinks))
@@ -61,19 +71,38 @@ async function getArticleLinksByUrl(urlInfo) {
     return finalArticleList
 }
 
-async function combineCommunityListScrap(communityList) {
+async function combineCommunityListScrap(communityList, stack) {
     let scrapedLinks = []
 
     for (const communityUrl of communityList) {
-        console.log('커뮤 속 커뮤 : 5초 대기')
-        await wait(5).then(() => console.log('대기 완'))
+        if (isInStack(communityUrl, stack)) {
+            continue
+        }
 
-        const scrapedResult = await scrapArticleLinks(communityUrl.url)
-
+        const scrapedResult = await scrapArticleLinks(communityUrl.url, stack)
         scrapedLinks.push(...scrapedResult)
     }
 
     return scrapedLinks
+
+    function isInStack(communityUrl, stack) {
+        function makeUniqueKey(urlInfo) {
+            return (urlInfo.communityId || '') + '&' + (urlInfo.documentId)
+        }
+        const communityKey = makeUniqueKey(communityUrl)
+
+        for (let stackUrl of stack) {
+            const stackKey = makeUniqueKey(stackUrl)
+
+            if (communityKey === stackKey) {
+                console.log(communityUrl.url, '중복 발견')
+                return true
+            }
+        }
+
+        return false
+
+    }
 }
 
 function getRawLinkList($, url) {
@@ -85,12 +114,16 @@ function getRawLinkList($, url) {
     let linkListOrigin = []
 
     for (let elem of aTagList) {
-        linkListOrigin.push(new UrlInfo(elem.attribs.href));
+        if (elem.attribs?.href) {
+            linkListOrigin.push(new UrlInfo(elem.attribs.href));
+        }
     }
 
     // 텍스트로 찾기
-    const urlRegex = /(https?:\/\/[0-9a-zA-Z.&?%/=-]+)/g;
+    const urlRegex = /(https?:\/\/[0-9a-zA-Z.&?%/=-_#,]+)/g;
+    // ...방지는 디시 방지용
     const urlGetByText = (innerText.match(urlRegex) || [])
+        .filter(urlStr => !urlStr.includes('...'))
         .map(url => new UrlInfo(url))
 
     linkListOrigin.push(...urlGetByText)
@@ -173,3 +206,6 @@ export { scrapArticleLinks }
 
 // scrapArticleLinks('https://gall.dcinside.com/mini/board/view/?id=test&no=1124')
 // scrapArticleLinks('https://www.ddanzi.com/index.php?mid=free&document_srl=801375669')
+// scrapArticleLinks('https://gall.dcinside.com/mgallery/board/view/?id=ljm&no=233998')
+// scrapArticleLinks('https://gall.dcinside.com/mgallery/board/view/?id=alliescon&no=2319850&s_type=search_subject_memo&s_keyword=좌표&page=1')
+// scrapArticleLinks('https://gall.dcinside.com/mgallery/board/view/?id=zamminjoo&no=32777&s_type=search_subject_memo&s_keyword=%EB%94%B4%EC%A7%80&page=1')

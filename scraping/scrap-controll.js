@@ -7,20 +7,28 @@ import { wait } from '../useful-functions.js'
 async function scrapStart() {
     for (let communityId in scrapSchedule) {
         const S_TO_MS = 1000
-
         const scrapIntervalTime = scrapSchedule[communityId].intervalSecond * S_TO_MS
         const scrapOptions = scrapSchedule[communityId].scrapOptions
 
+        console.log(communityId, '등록 전 실행')
+
+        await scrapDcGall(communityId, scrapOptions)
+
+        console.log(communityId, '등록 전 실행 완료')
+
         setInterval(scrapDcGall, scrapIntervalTime, communityId, scrapOptions)
-        console.log(communityId, '등록 완료')
-        console.log('스크랩 등록간 대기 : 600초 대기')
-        await wait(600).then(() => console.log('대기 완'))
+
+        console.log(communityId, '일정 등록 완료')
+        console.log('스크랩 등록간 대기 : 240초 대기')
+
+        await wait(240).then(() => console.log('스크랩 등록 대기 완'))
     }
 }
 
 async function scrapDcGall(communityId, scrapOptions) {
-    let nowTime = new Date()
+    console.log(communityId, '스크랩 시작')
 
+    let nowTime = new Date()
     const postList = await scrapDcPostUnify(communityId, scrapOptions)
 
     console.log(`${communityId}에서 postlist ${postList.length}개 수집`)
@@ -28,8 +36,6 @@ async function scrapDcGall(communityId, scrapOptions) {
     for (let post of postList) {
         let result = await scrapArticleLinks(post.url)
         console.log(`크롤링된 링크 ${result.length}개`)
-        console.log('post 스크랩간 7초간 대기')
-        await wait(7).then(() => console.log('대기 완'))
     }
 
     await updateScrapTime(communityId, nowTime)
@@ -64,8 +70,8 @@ async function scrapDcPostUnify(communityId, scrapOptions) {
 
             postList.push(...postListResult)
 
-            console.log('스크랩 옵션간 대기 : 4초 대기')
-            await wait(4).then(() => console.log('대기 완'))
+            console.log('스크랩 옵션간 대기 : 2초 대기')
+            await wait(2).then(() => console.log('스크랩 옵션간 대기 완'))
         }
 
         postList = beUniqueUrlList(postList)
@@ -113,18 +119,18 @@ function beUniqueUrlList(dcUrlList) {
 
 export { scrapStart }
 
-scrapDcGall('dc_leejaemyungdo', [
-    { tabId: 140 },
-    { searchKeyword: '좌표' },
-    { searchKeyword: '댓방' },
-    { searchKeyword: '댓관' },
-    { searchKeyword: 'ㅂㅊ' },
-    { searchKeyword: '비추' },
-    { searchKeyword: 'ㄸㅈ' },
-    { searchKeyword: '딴지' },
-    { searchKeyword: 'ㅊㅊ' },
-    { searchKeyword: '베댓' },
-    { searchKeyword: '역따' }
-])
+// scrapDcGall('dc_ljm', [
+//     { tabId: 10 },
+//     { searchKeyword: '좌표' },
+//     { searchKeyword: '댓방' },
+//     { searchKeyword: '댓관' },
+//     { searchKeyword: 'ㅂㅊ' },
+//     { searchKeyword: '비추' },
+//     { searchKeyword: 'ㄸㅈ' },
+//     { searchKeyword: '딴지' },
+//     { searchKeyword: 'ㅊㅊ' },
+//     { searchKeyword: '베댓' },
+//     { searchKeyword: '역따' }
+// ])
 
 // scrapStart()

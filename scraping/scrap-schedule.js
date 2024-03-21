@@ -10,8 +10,8 @@ const commonWords = ['좌표', '댓방', '댓관', 'ㅂㅊ', '비추', 'ㄸㅈ',
         return { 'searchKeyword': word }
     })
 
-const DEFAULT_INTERVAL_SHORT = 600
-const DEFAULT_INTERVAL = 600
+const DEFAULT_INTERVAL_SHORT = 900
+const DEFAULT_INTERVAL = 3600
 const DEFAULT_INTERVAL_LONG = 21600
 
 const scrapSchedule = {
@@ -22,26 +22,12 @@ const scrapSchedule = {
     //     }],
     //     intervalSecond: 10
     // },
-    // 'dc_ljm': {
-    //     scrapOptions: [
-    //         { tabId: 10 },
-    //         ...commonWords
-    //     ],
-    //     intervalSecond: DEFAULT_INTERVAL
-    // },
-    // 'dc_alliescon': {
-    //     scrapOptions: [
-    //         { tabId: 500 },
-    //         ...commonWords
-    //     ],
-    //     intervalSecond: DEFAULT_INTERVAL
-    // },
-    // 'dc_leejaemyung': {
-    //     scrapOptions: [
-    //         ...commonWords
-    //     ],
-    //     intervalSecond: DEFAULT_INTERVAL
-    // },
+    'dc_drama_new3':{
+        scrapOptions: [
+            { 'searchKeyword': '한동훈줌' }
+        ],
+        intervalSecond: DEFAULT_INTERVAL_SHORT
+    },
     'dc_leejaemyungdo': {
         scrapOptions: [
             { tabId: 140 },
@@ -49,20 +35,40 @@ const scrapSchedule = {
         ],
         intervalSecond: DEFAULT_INTERVAL
     },
-    // 'dc_zamminjoo': {
-    //     scrapOptions: [
-    //         { tabId: 60 },
-    //         ...commonWords
-    //     ],
-    //     intervalSecond: DEFAULT_INTERVAL * 6
-    // },
-    // 'dc_rightpolitics': {
-    //     scrapOptions: [
-    //         { tabId: 10 },
-    //         ...commonWords
-    //     ],
-    //     intervalSecond: DEFAULT_INTERVAL
-    // },
+    'dc_alliescon': {
+        scrapOptions: [
+            { tabId: 500 },
+            ...commonWords
+        ],
+        intervalSecond: DEFAULT_INTERVAL
+    },
+    'dc_leejaemyung': {
+        scrapOptions: [
+            ...commonWords
+        ],
+        intervalSecond: DEFAULT_INTERVAL
+    },
+    'dc_rightpolitics': {
+        scrapOptions: [
+            { tabId: 10 },
+            ...commonWords
+        ],
+        intervalSecond: DEFAULT_INTERVAL
+    },
+    'dc_zamminjoo': {
+        scrapOptions: [
+            { tabId: 60 },
+            ...commonWords
+        ],
+        intervalSecond: DEFAULT_INTERVAL_LONG
+    },
+    'dc_ljm': {
+        scrapOptions: [
+            { tabId: 10 },
+            ...commonWords
+        ],
+        intervalSecond: DEFAULT_INTERVAL_LONG
+    },
 }
 
 export { scrapSchedule }

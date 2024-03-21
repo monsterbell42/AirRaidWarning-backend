@@ -1,4 +1,7 @@
-const help = [1,2,3]
+async function hello() {
+    setInterval(() => console.error('hello'), 5000)
+}
 
-console.log(new Set(...help
-.map(i=>i+3)))
+(async () => {
+    await hello().catch(err=>console.log(err))
+})()

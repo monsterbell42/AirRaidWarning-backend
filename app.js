@@ -1,6 +1,7 @@
 import express from 'express';
 import { getWarnByArticle } from './db/function.js';
 import { communityInfo } from './community-info.js';
+import { scrapStart } from './scraping/scrap-controll.js'
 
 const app = express();
 let port = 3000;
@@ -77,6 +78,10 @@ app.get('/', (req, res) => {
 const server = app.listen(port, () => {
     console.log(`server on ${port}`);
 });
+
+(async () => {
+    await scrapStart().catch(err => console.log(err))
+})()
 
 // function myFunction() {
 //     getWarnByArticle(57, 1794654)
