@@ -19,17 +19,17 @@ async function scrapStart() {
         setInterval(scrapDcGall, scrapIntervalTime, communityId, scrapOptions)
 
         console.log(communityId, '일정 등록 완료')
-        console.log('스크랩 등록간 대기 : 240초 대기')
+        console.log('스크랩 등록간 대기 : 200초 대기')
 
-        await wait(240).then(() => console.log('스크랩 등록 대기 완'))
+        await wait(200).then(() => console.log('스크랩 등록 대기 완'))
     }
 }
 
-async function scrapDcGall(communityId, scrapOptions) {
+async function scrapDcGall(communityId, scrapOptions, lastScrapTime = null) {
     console.log(communityId, '스크랩 시작')
 
     let nowTime = new Date()
-    const postList = await scrapDcPostUnify(communityId, scrapOptions)
+    const postList = await scrapDcPostUnify(communityId, scrapOptions, lastScrapTime)
 
     console.log(`${communityId}에서 postlist ${postList.length}개 수집`)
 
@@ -43,10 +43,10 @@ async function scrapDcGall(communityId, scrapOptions) {
 
 }
 
-async function scrapDcPostUnify(communityId, scrapOptions) {
+async function scrapDcPostUnify(communityId, scrapOptions, lastScrapTime = null) {
     console.log(communityId, scrapOptions, '스크랩 시작')
 
-    const lastScrapTime = await getLastScrapTime(communityId)
+    if(!lastScrapTime) lastScrapTime = await getLastScrapTime(communityId)
 
     let postList = []
 
@@ -117,20 +117,4 @@ function beUniqueUrlList(dcUrlList) {
     return uniqueUrlList;
 }
 
-export { scrapStart }
-
-// scrapDcGall('dc_ljm', [
-//     { tabId: 10 },
-//     { searchKeyword: '좌표' },
-//     { searchKeyword: '댓방' },
-//     { searchKeyword: '댓관' },
-//     { searchKeyword: 'ㅂㅊ' },
-//     { searchKeyword: '비추' },
-//     { searchKeyword: 'ㄸㅈ' },
-//     { searchKeyword: '딴지' },
-//     { searchKeyword: 'ㅊㅊ' },
-//     { searchKeyword: '베댓' },
-//     { searchKeyword: '역따' }
-// ])
-
-// scrapStart()
+export { scrapStart, scrapDcGall }

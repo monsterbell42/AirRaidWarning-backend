@@ -199,13 +199,3 @@ function beUniqueUrlList(urlInfoList) {
 }
 
 export { scrapArticleLinks }
-
-// getAllArticleLink('https://gall.dcinside.com/mini/board/view/?id=test&no=1124').then(v=>console.log(v))
-//test url : 'https://gall.dcinside.com/mini/board/view/?id=test&no=1124'
-//'https://www.ddanzi.com/index.php?mid=free&document_srl=796235818'
-
-// scrapArticleLinks('https://gall.dcinside.com/mini/board/view/?id=test&no=1124')
-// scrapArticleLinks('https://www.ddanzi.com/index.php?mid=free&document_srl=801375669')
-// scrapArticleLinks('https://gall.dcinside.com/mgallery/board/view/?id=ljm&no=233998')
-// scrapArticleLinks('https://gall.dcinside.com/mgallery/board/view/?id=alliescon&no=2319850&s_type=search_subject_memo&s_keyword=좌표&page=1')
-// scrapArticleLinks('https://gall.dcinside.com/mgallery/board/view/?id=zamminjoo&no=32777&s_type=search_subject_memo&s_keyword=%EB%94%B4%EC%A7%80&page=1')

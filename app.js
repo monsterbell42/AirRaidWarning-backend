@@ -40,10 +40,22 @@ app.get('/', (req, res) => {
             let raidResultFinal = []
             for (let i of raidResult) {
                 const communityResult = communityInfo[i.community_id];
-                raidResultFinal.push({
-                    community_name: communityResult.name,
-                    community_url: communityResult.getUrl(i.document_id)
-                })
+                let pushJson = {}
+
+                if(!communityResult) {
+                    pushJson = {
+                        community_name: i.community_id,
+                        community_url: ''
+                    }
+
+                } else {
+                    pushJson = {
+                        community_name: communityResult.name,
+                        community_url: communityResult.getUrl(i.document_id)
+                    }
+                }
+
+                raidResultFinal.push(pushJson)
             }
 
             sendResult = {
@@ -65,16 +77,6 @@ app.get('/', (req, res) => {
 
 });
 
-// app.get('/b', (req, res) => {
-//     res.header("Access-Control-Allow-Origin", "*")
-//     getWarnByArticle(57, 1794654)
-//         .then(raidResult => {
-//             console.log(raidResult)
-//             res.send(raidResult);
-
-//         })
-// })
-
 const server = app.listen(port, () => {
     console.log(`server on ${port}`);
 });
@@ -82,14 +84,3 @@ const server = app.listen(port, () => {
 // (async () => {
 //     await scrapStart().catch(err => console.log(err))
 // })()
-
-// function myFunction() {
-//     getWarnByArticle(57, 1794654)
-//         .then(raidResult => {
-//             console.log(raidResult)
-//             return;
-//         })
-// }
-
-// const intervalInMilliseconds = 5000;
-// setInterval(myFunction, intervalInMilliseconds);
