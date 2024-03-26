@@ -9,8 +9,8 @@ const DC_BASE_MINI_VIEW_URL = 'https://gall.dcinside.com/mini/board/view/'
 const communityInfo = {
     dc_scipol: {
         name: '테스트 갤러리',
-        listUrl: `${DC_BASE_MINI_LIST_URL}?id=scipol`,
-        getUrl: (document_id) => `${DC_BASE_MINI_VIEW_URL}?id=scipol&no=${document_id}`
+        listUrl: `${DC_BASE_MINOR_LIST_URL}?id=scipol`,
+        getUrl: (document_id) => `${DC_BASE_MINOR_VIEW_URL}?id=scipol&no=${document_id}`
     },
     dc_leejaemyung: {
         name: '이재명 갤러리',
